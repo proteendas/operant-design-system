@@ -27,9 +27,11 @@
   border-bottom: var(--border-hairline) solid var(--color-border);
   position: sticky; top: 0; z-index: var(--z-nav);
 }
-.ods-main { grid-area: main; overflow: auto; min-width: 0; }
+/* overflow-x hidden here is the safety net: a wide descendant (table, log,
+   diff) must scroll inside its own wrapper, never stretch the whole page. */
+.ods-main { grid-area: main; overflow-y: auto; overflow-x: hidden; min-width: 0; }
 .ods-context {
-  grid-area: context; overflow: auto;
+  grid-area: context; overflow-y: auto; overflow-x: hidden;
   background: var(--color-surface);
   border-left: var(--border-hairline) solid var(--color-border);
 }
@@ -136,11 +138,12 @@
   display: inline-flex; padding: var(--space-1); gap: var(--space-1);
   background: var(--color-surface-sunken); border-radius: var(--radius-md);
   border: var(--border-hairline) solid var(--color-border-subtle);
+  flex-shrink: 0;
 }
 .ods-segment {
   padding: var(--space-3) var(--space-6); font-size: var(--fs-sm); font-weight: var(--fw-medium);
   color: var(--color-text-muted); border-radius: var(--radius-sm); cursor: pointer;
-  transition: all var(--dur-fast) var(--ease-out);
+  transition: all var(--dur-fast) var(--ease-out); white-space: nowrap;
 }
 .ods-segment.is-active { background: var(--color-surface); color: var(--color-text); box-shadow: var(--shadow-xs); }
 
@@ -240,6 +243,7 @@
   font-size: var(--fs-xs); font-weight: var(--fw-medium); line-height: 1;
   background: var(--color-surface-sunken); color: var(--color-text-muted);
   border: var(--border-hairline) solid var(--color-border-subtle);
+  white-space: nowrap; flex-shrink: 0; /* a pill must never wrap/squeeze its own text */
 }
 .ods-badge.-solid { border: 0; }
 .ods-badge.-success { background: var(--color-success-subtle); color: var(--color-success); border-color: var(--color-success-border); }
@@ -253,7 +257,7 @@
   min-width: 18px; height: 18px; padding: 0 var(--space-3);
   border-radius: var(--radius-full); background: var(--color-surface-sunken);
   color: var(--color-text-muted); font-size: var(--fs-2xs); font-weight: var(--fw-semibold);
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: tabular-nums; white-space: nowrap; flex-shrink: 0;
 }
 .ods-count.-primary { background: var(--color-primary); color: var(--color-text-onbrand); }
 
@@ -261,6 +265,7 @@
 .ods-status {
   display: inline-flex; align-items: center; gap: var(--space-4);
   font-size: var(--fs-sm); font-weight: var(--fw-medium); color: var(--color-text-muted);
+  white-space: nowrap; flex-shrink: 0;
 }
 .ods-dot { width: 8px; height: 8px; border-radius: var(--radius-full); background: var(--color-agent-idle); flex: none; }
 .ods-dot.-active     { background: var(--color-agent-active); }
@@ -657,9 +662,20 @@
   /* Prompt composer toolbar wraps instead of squeezing chips unreadable. */
   .ods-composer-toolbar { flex-wrap: wrap; row-gap: var(--space-4); }
 
-  /* Approval bar: context on its own line, actions fill the width evenly. */
-  .ods-approval-bar { flex-wrap: wrap; }
-  .ods-approval-bar .grow { flex-basis: 100%; }
+  /* Approval bar: stack into a clean vertical list of full-width actions
+     rather than squeezing buttons onto shared rows — squeezed buttons is
+     what looked "compressed" before. */
+  .ods-approval-bar { flex-direction: column; align-items: stretch; }
+  .ods-approval-bar .grow { flex-basis: auto; }
   .ods-approval-bar kbd { display: none; }
-  .ods-approval-bar .ods-btn { flex: 1 1 auto; }
+  .ods-approval-bar .ods-btn { width: 100%; flex: none; }
+
+  /* Grid/flex items must not inherit their descendants' full min-content
+     width — without this, a wide table/log/diff bloats the whole column
+     and the entire page (not just that element) scrolls horizontally. */
+  .ods-page, .grid-2 > *, .trace > *, .inbox > *, .kpis > * { min-width: 0; }
+
+  /* A section header with a title + segmented/badge cluster wraps instead
+     of forcing the row wider than the viewport. */
+  .row.between { flex-wrap: wrap; row-gap: var(--space-4); }
 }

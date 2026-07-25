@@ -30,6 +30,10 @@
       .back-btn { display: inline-flex; }
       .ods-approval-bar .ods-btn kbd { display: none; }
     }
+    @media (max-width: 640px){
+      .ods-topbar .ods-badge.-warning,
+      .ods-topbar .ods-segmented { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -49,7 +53,7 @@
     <button class="ods-navtoggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h12M2 8h12M2 12h12"/></svg>
     </button>
-    <div class="row gap-6 text-muted text-sm"><span>Reviews</span><span>/</span><span style="color:var(--color-text)">Approval inbox</span></div>
+    <div class="row gap-6 text-muted text-sm crumb"><span>Reviews</span><span>/</span><span style="color:var(--color-text)">Approval inbox</span></div>
     <span class="grow"></span>
     <span class="ods-badge -warning">3 high-risk</span>
     <div class="ods-segmented" aria-label="Sort">
@@ -58,7 +62,7 @@
       <span class="ods-segment">Agent</span>
     </div>
     <button class="ods-iconbtn" id="themeBtn" aria-label="Toggle theme">◐</button>
-    <span class="ods-avatar">RK</span>
+    <span class="ods-avatar">PD</span>
   </header>
 
   <main class="ods-main" style="padding:0">

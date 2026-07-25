@@ -108,6 +108,9 @@ kbd {
 .gap-6 { gap: var(--space-6); } .gap-8 { gap: var(--space-8); }
 .gap-12{ gap: var(--space-12);} .gap-16{ gap: var(--space-16);}
 .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Breadcrumb-style rows: shrink and clip before pushing sibling tags off a topbar */
+.crumb { min-width: 0; overflow: hidden; white-space: nowrap; }
+.crumb > span:last-child { overflow: hidden; text-overflow: ellipsis; }
 .divider  { height: 1px; background: var(--color-divider); border: 0; }
 .vdivider { width: 1px; align-self: stretch; background: var(--color-divider); }
 .scroll-y { overflow-y: auto; overscroll-behavior: contain; }
