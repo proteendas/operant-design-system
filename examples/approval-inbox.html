@@ -20,7 +20,16 @@
     .brand { display: flex; align-items: center; gap: var(--space-6); font-weight: var(--fw-semibold); }
     .brand-mark { width: 22px; height: 22px; border-radius: var(--radius-sm); background: var(--color-accent);
       display: grid; place-items: center; color: #fff; font-family: var(--font-mono); font-weight: 700; font-size: 12px; }
-    @media (max-width: 900px){ .inbox { grid-template-columns: 1fr; } .queue { display:none; } }
+    .back-btn { display: none; }
+    @media (max-width: 900px){
+      .inbox { grid-template-columns: 1fr; }
+      /* Master-detail: queue shown by default, detail replaces it once an item is opened. */
+      .detail { display: none; }
+      .inbox.-detail-open .queue { display: none; }
+      .inbox.-detail-open .detail { display: block; }
+      .back-btn { display: inline-flex; }
+      .ods-approval-bar .ods-btn kbd { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -34,7 +43,12 @@
     <a class="ods-nav-item">Traces</a>
   </nav>
 
+  <div class="ods-scrim" id="navScrim"></div>
+
   <header class="ods-topbar">
+    <button class="ods-navtoggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h12M2 8h12M2 12h12"/></svg>
+    </button>
     <div class="row gap-6 text-muted text-sm"><span>Reviews</span><span>/</span><span style="color:var(--color-text)">Approval inbox</span></div>
     <span class="grow"></span>
     <span class="ods-badge -warning">3 high-risk</span>
@@ -48,7 +62,7 @@
   </header>
 
   <main class="ods-main" style="padding:0">
-    <div class="inbox">
+    <div class="inbox" id="inbox">
       <!-- QUEUE -->
       <div class="queue" role="list" aria-label="Pending reviews">
         <div class="qitem is-active" role="listitem">
@@ -104,6 +118,10 @@
       <!-- DETAIL -->
       <div class="detail">
         <div class="detail-inner stack gap-12">
+          <button class="ods-btn -ghost -sm back-btn" id="backBtn" style="align-self:flex-start">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3L5 8l5 5"/></svg>
+            Back to queue
+          </button>
           <div class="stack gap-6">
             <div class="row gap-6 wrap">
               <span class="ods-badge -danger">high-risk</span>
@@ -188,9 +206,26 @@
   });
   // Queue selection + keyboard triage (J/K move, A/R/E act)
   const items = [...document.querySelectorAll('.qitem')];
+  const inbox = document.getElementById('inbox');
   let idx = 0;
-  const select = i => { items.forEach(x=>x.classList.remove('is-active')); idx=(i+items.length)%items.length; items[idx].classList.add('is-active'); items[idx].scrollIntoView({block:'nearest'}); };
+  const select = i => {
+    items.forEach(x=>x.classList.remove('is-active')); idx=(i+items.length)%items.length;
+    items[idx].classList.add('is-active'); items[idx].scrollIntoView({block:'nearest'});
+    inbox.classList.add('-detail-open'); // on mobile, opening an item swaps the queue for the detail pane
+  };
   items.forEach((el,i)=>el.addEventListener('click',()=>select(i)));
+  document.getElementById('backBtn').addEventListener('click', () => inbox.classList.remove('-detail-open'));
+
+  // Mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const navEl = document.querySelector('.ods-nav');
+  const navScrim = document.getElementById('navScrim');
+  const closeNav = () => { navEl.classList.remove('is-open'); navScrim.classList.remove('is-open'); navToggle.setAttribute('aria-expanded', 'false'); };
+  const openNav = () => { navEl.classList.add('is-open'); navScrim.classList.add('is-open'); navToggle.setAttribute('aria-expanded', 'true'); };
+  navToggle.addEventListener('click', () => navEl.classList.contains('is-open') ? closeNav() : openNav());
+  navScrim.addEventListener('click', closeNav);
+  navEl.querySelectorAll('.ods-nav-item').forEach(item => item.addEventListener('click', closeNav));
+
   addEventListener('keydown', e => {
     if(e.key==='j'||e.key==='ArrowDown'){select(idx+1);e.preventDefault();}
     if(e.key==='k'||e.key==='ArrowUp'){select(idx-1);e.preventDefault();}

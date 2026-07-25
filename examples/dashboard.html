@@ -16,6 +16,12 @@
       display: grid; place-items: center; color: #fff; font-family: var(--font-mono); font-weight: 700; font-size: 13px; }
     .searchbar { flex: 1; max-width: 420px; }
     @media (max-width: 1100px){ .grid-2 { grid-template-columns: 1fr; } .kpis { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 760px){
+      .ods-page { padding: var(--space-8) var(--space-8); }
+      .searchbar { display: none; }
+      .ods-topbar .ods-badge.-info { display: none; }
+    }
+    @media (max-width: 420px){ .kpis { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -41,8 +47,13 @@
     </div>
   </nav>
 
+  <div class="ods-scrim" id="navScrim"></div>
+
   <!-- TOP BAR -->
   <header class="ods-topbar">
+    <button class="ods-navtoggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h12M2 8h12M2 12h12"/></svg>
+    </button>
     <div class="row gap-6 text-muted text-sm"><span>Operations</span><span>/</span><span style="color:var(--color-text)">Overview</span></div>
     <div class="searchbar ods-input-group" style="height:var(--control-h-sm)">
       ${icon.search}
@@ -107,6 +118,7 @@
             </div>
           </div>
           <div class="ods-card" data-density="compact">
+            <div class="ods-table-scroll">
             <table class="ods-table">
               <thead><tr>
                 <th>Run</th><th>Agent</th><th>Status</th><th>Step</th>
@@ -160,6 +172,7 @@
                 </tr>
               </tbody>
             </table>
+            </div>
           </div>
 
           <!-- Event log -->
@@ -238,6 +251,16 @@
     const html = document.documentElement;
     html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
   });
+
+  // Mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const navEl = document.querySelector('.ods-nav');
+  const navScrim = document.getElementById('navScrim');
+  const closeNav = () => { navEl.classList.remove('is-open'); navScrim.classList.remove('is-open'); navToggle.setAttribute('aria-expanded', 'false'); };
+  const openNav = () => { navEl.classList.add('is-open'); navScrim.classList.add('is-open'); navToggle.setAttribute('aria-expanded', 'true'); };
+  navToggle.addEventListener('click', () => navEl.classList.contains('is-open') ? closeNav() : openNav());
+  navScrim.addEventListener('click', closeNav);
+  navEl.querySelectorAll('.ods-nav-item').forEach(item => item.addEventListener('click', closeNav));
 </script>
 </body>
 </html>

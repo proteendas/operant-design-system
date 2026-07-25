@@ -13,6 +13,7 @@
     .brand-mark { width:22px;height:22px;border-radius:var(--radius-sm);background:var(--color-accent);
       display:grid;place-items:center;color:#fff;font-family:var(--font-mono);font-weight:700;font-size:12px; }
     @media (max-width: 900px){ .trace { grid-template-columns: 1fr; } }
+    @media (max-width: 640px){ .hide-narrow { display: none; } }
   </style>
 </head>
 <body>
@@ -25,11 +26,19 @@
     <a class="ods-nav-item is-active">Traces</a>
   </nav>
 
+  <div class="ods-scrim" id="scrim"></div>
+
   <header class="ods-topbar">
+    <button class="ods-navtoggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h12M2 8h12M2 12h12"/></svg>
+    </button>
     <div class="row gap-6 text-muted text-sm"><span>Traces</span><span>/</span><span class="mono" style="color:var(--color-text)">#4820</span></div>
     <span class="grow"></span>
-    <button class="ods-btn -secondary -sm">Export trace</button>
+    <button class="ods-btn -secondary -sm hide-narrow">Export trace</button>
     <button class="ods-btn -secondary -sm">Re-run with edits</button>
+    <button class="ods-iconbtn ods-context-toggle" id="contextToggle" aria-label="Open run details">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 5.5v.01M8 7.5v3.5"/></svg>
+    </button>
     <button class="ods-iconbtn" id="themeBtn" aria-label="Toggle theme">◐</button>
   </header>
 
@@ -121,8 +130,12 @@
   </main>
 
   <!-- Right context panel -->
-  <aside class="ods-context">
-    <div class="ods-pane-header"><b>Run details</b></div>
+  <aside class="ods-context" id="contextPanel">
+    <div class="ods-pane-header">
+      <b>Run details</b>
+      <span class="grow"></span>
+      <button class="ods-iconbtn ods-context-toggle" id="contextClose" aria-label="Close run details">✕</button>
+    </div>
     <div class="stack gap-12" style="padding: var(--space-12)">
       <div class="ods-metric" style="padding:0">
         <div class="ods-metric-label">Confidence</div>
@@ -151,6 +164,33 @@
   document.getElementById('themeBtn').addEventListener('click', () => {
     const h = document.documentElement; h.dataset.theme = h.dataset.theme === 'dark' ? 'light' : 'dark';
   });
+
+  // Mobile nav toggle + off-canvas context drawer share one scrim
+  const navToggle = document.getElementById('navToggle');
+  const navEl = document.querySelector('.ods-nav');
+  const contextToggle = document.getElementById('contextToggle');
+  const contextClose = document.getElementById('contextClose');
+  const contextEl = document.getElementById('contextPanel');
+  const scrim = document.getElementById('scrim');
+
+  const closeAll = () => {
+    navEl.classList.remove('is-open'); contextEl.classList.remove('is-open');
+    scrim.classList.remove('is-open'); navToggle.setAttribute('aria-expanded', 'false');
+  };
+  navToggle.addEventListener('click', () => {
+    const opening = !navEl.classList.contains('is-open');
+    closeAll();
+    if (opening) { navEl.classList.add('is-open'); scrim.classList.add('is-open'); navToggle.setAttribute('aria-expanded', 'true'); }
+  });
+  contextToggle.addEventListener('click', () => {
+    const opening = !contextEl.classList.contains('is-open');
+    closeAll();
+    if (opening) { contextEl.classList.add('is-open'); scrim.classList.add('is-open'); }
+  });
+  contextClose.addEventListener('click', closeAll);
+  scrim.addEventListener('click', closeAll);
+  navEl.querySelectorAll('.ods-nav-item').forEach(item => item.addEventListener('click', closeAll));
+
   document.querySelectorAll('.ods-tab').forEach(t => t.addEventListener('click', () => {
     document.querySelectorAll('.ods-tab').forEach(x=>{x.classList.remove('is-active');x.setAttribute('aria-selected','false');});
     t.classList.add('is-active'); t.setAttribute('aria-selected','true');

@@ -15,6 +15,11 @@
     .demo { display: flex; flex-wrap: wrap; gap: var(--space-8); align-items: center; padding: var(--space-8) 0; }
     .toolbar { position: sticky; top: 0; z-index: var(--z-sticky); display: flex; align-items: center; gap: var(--space-8);
       padding: var(--space-8) var(--space-16); background: var(--color-surface); border-bottom: var(--border-hairline) solid var(--color-border); }
+    @media (max-width: 640px) {
+      .wrap { padding: var(--space-8); }
+      .toolbar { padding: var(--space-6) var(--space-8); flex-wrap: wrap; row-gap: var(--space-6); }
+      .toolbar b { flex-basis: 100%; }
+    }
   </style>
 </head>
 <body>

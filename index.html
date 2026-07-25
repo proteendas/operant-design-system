@@ -39,6 +39,17 @@
     .grid.-screens { grid-template-columns: repeat(2, 1fr); }
     .grid.-docs { grid-template-columns: repeat(3, 1fr); }
     @media (max-width: 760px){ .grid.-screens, .grid.-docs { grid-template-columns: 1fr; } }
+    @media (max-width: 640px){
+      .home { padding: var(--space-8); }
+      .topbar { padding: 0 var(--space-8); gap: var(--space-4); }
+      .topbar .ods-badge { display: none; }
+      #density { display: none; }
+      .hero { padding: var(--space-16) 0 var(--space-12); }
+      .hero h1 { font-size: var(--fs-2xl); max-width: none; }
+      .hero p { font-size: var(--fs-md); }
+      .section-head { margin: var(--space-16) 0 var(--space-6); }
+      .section-head h2 { font-size: var(--fs-xl); }
+    }
 
     .nav-card { display: flex; flex-direction: column; text-decoration: none; color: inherit; overflow: hidden; }
     .nav-card:hover { text-decoration: none; }
