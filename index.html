@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en" data-theme="dark" data-density="comfortable">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Operant · AI Workflow Design System</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <style>
+    /* Page-local layout — every value still resolves from tokens */
+    .home { max-width: 1080px; margin: 0 auto; padding: var(--space-16); }
+
+    .topbar {
+      position: sticky; top: 0; z-index: var(--z-sticky);
+      display: flex; align-items: center; gap: var(--space-8);
+      height: var(--h-topnav); padding: 0 var(--space-16);
+      background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+      backdrop-filter: saturate(1.2) blur(8px);
+      border-bottom: var(--border-hairline) solid var(--color-border);
+    }
+    .brand { display: flex; align-items: center; gap: var(--space-6); font-weight: var(--fw-semibold); }
+    .brand-mark { width: 26px; height: 26px; border-radius: var(--radius-sm); background: var(--color-accent);
+      display: grid; place-items: center; color: #fff; font-family: var(--font-mono); font-weight: 700; font-size: 14px; }
+
+    /* Hero — operational, not marketing */
+    .hero { padding: var(--space-24) 0 var(--space-16); border-bottom: var(--border-hairline) solid var(--color-border); }
+    .hero h1 { font-size: var(--fs-4xl); font-weight: var(--fw-bold); line-height: var(--lh-tight);
+      letter-spacing: var(--tracking-tight); max-width: 18ch; }
+    .hero p { font-size: var(--fs-lg); color: var(--color-text-muted); line-height: var(--lh-relaxed);
+      max-width: var(--w-reading-max); margin-top: var(--space-8); }
+    .personality { display: flex; flex-wrap: wrap; gap: var(--space-4); margin-top: var(--space-10); }
+
+    .section-head { display: flex; align-items: baseline; gap: var(--space-8); margin: var(--space-20) 0 var(--space-8); }
+    .section-head h2 { font-size: var(--fs-2xl); font-weight: var(--fw-semibold); letter-spacing: var(--tracking-tight); }
+
+    /* Card grids */
+    .grid { display: grid; gap: var(--space-8); }
+    .grid.-screens { grid-template-columns: repeat(2, 1fr); }
+    .grid.-docs { grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 760px){ .grid.-screens, .grid.-docs { grid-template-columns: 1fr; } }
+
+    .nav-card { display: flex; flex-direction: column; text-decoration: none; color: inherit; overflow: hidden; }
+    .nav-card:hover { text-decoration: none; }
+    /* Miniature preview strip that mimics the screen */
+    .preview { height: 116px; border-bottom: var(--border-hairline) solid var(--color-border-subtle);
+      background: var(--color-surface-sunken); position: relative; overflow: hidden; display: flex; }
+    .preview .mini-nav { width: 46px; background: var(--color-surface); border-right: var(--border-hairline) solid var(--color-border-subtle);
+      padding: var(--space-4); display: flex; flex-direction: column; gap: var(--space-3); }
+    .preview .mini-nav i { height: 6px; border-radius: var(--radius-full); background: var(--color-border-strong); display: block; }
+    .preview .mini-nav i.on { background: var(--color-primary); }
+    .preview .mini-body { flex: 1; padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-4); }
+    .mini-row { height: 9px; border-radius: var(--radius-xs); background: var(--color-border); }
+    .mini-tiles { display: grid; grid-template-columns: repeat(4,1fr); gap: var(--space-3); }
+    .mini-tile { height: 22px; border-radius: var(--radius-sm); background: var(--color-surface); border: var(--border-hairline) solid var(--color-border-subtle); }
+    .mini-chip { height: 8px; border-radius: var(--radius-full); }
+    .nav-card-body { padding: var(--space-8) var(--space-10); display: flex; flex-direction: column; gap: var(--space-3); flex: 1; }
+    .nav-card-title { font-size: var(--fs-lg); font-weight: var(--fw-semibold); display: flex; align-items: center; gap: var(--space-4); }
+    .nav-card-title .arw { margin-left: auto; color: var(--color-text-faint); transition: transform var(--dur-fast) var(--ease-out); }
+    .nav-card:hover .arw { transform: translateX(3px); color: var(--color-text); }
+    .nav-card-desc { font-size: var(--fs-sm); color: var(--color-text-muted); line-height: var(--lh-normal); }
+
+    /* Token swatches */
+    .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-6); }
+    .sw { display: flex; align-items: center; gap: var(--space-6); padding: var(--space-6);
+      border: var(--border-hairline) solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); }
+    .sw-chip { width: 26px; height: 26px; border-radius: var(--radius-sm); flex: none; border: var(--border-hairline) solid var(--color-border-subtle); }
+    .sw-name { font-size: var(--fs-xs); font-family: var(--font-mono); color: var(--color-text-muted); line-height: 1.3; }
+    .sw-role { font-size: var(--fs-xs); color: var(--color-text); font-weight: var(--fw-medium); }
+
+    footer.foot { margin-top: var(--space-24); padding: var(--space-12) 0; border-top: var(--border-hairline) solid var(--color-border);
+      color: var(--color-text-subtle); font-size: var(--fs-sm); display: flex; gap: var(--space-8); flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="brand"><span class="brand-mark">O</span> Operant</div>
+    <span class="ods-badge">AI Workflow Design System</span>
+    <span style="flex:1"></span>
+    <div class="ods-segmented" id="density" aria-label="Density">
+      <span class="ods-segment is-active" data-d="comfortable">Comfortable</span>
+      <span class="ods-segment" data-d="compact">Compact</span>
+    </div>
+    <button class="ods-iconbtn" id="themeBtn" aria-label="Toggle color theme" title="Toggle theme">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M13 9.5A5.5 5.5 0 016.5 3a5.5 5.5 0 106.5 6.5z"/></svg>
+    </button>
+  </div>
+
+  <div class="home">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="text-eyebrow" style="margin-bottom:var(--space-6)">Self-contained · agent-readable · production-minded</div>
+      <h1>A design language for AI-assisted workflows.</h1>
+      <p>Operant is an operations console design system for copilots, workflow automation, incident
+      triage, research assistants, and human-in-the-loop review pipelines. Dense by default, deep on
+      click — built to feel intelligent, operational, and trustworthy under real complexity.</p>
+      <div class="personality">
+        <span class="ods-badge -agent"><span class="ods-dot -active"></span> intelligent</span>
+        <span class="ods-badge">operational</span>
+        <span class="ods-badge -success">trustworthy</span>
+        <span class="ods-badge">efficient</span>
+        <span class="ods-badge -info">calm under complexity</span>
+      </div>
+      <div class="row gap-6 wrap" style="margin-top:var(--space-12)">
+        <a class="ods-btn -primary" href="examples/dashboard.html">Open the dashboard</a>
+        <a class="ods-btn -secondary" href="examples/components.html">Browse components</a>
+        <a class="ods-btn -ghost" href="DESIGN-SYSTEM.md">Read the spec</a>
+      </div>
+    </section>
+
+    <!-- EXAMPLE SCREENS -->
+    <div class="section-head">
+      <h2>Example screens</h2>
+      <span class="text-muted text-sm">Runnable HTML, both themes</span>
+    </div>
+    <div class="grid -screens">
+
+      <a class="ods-card -interactive nav-card" href="examples/dashboard.html">
+        <div class="preview">
+          <div class="mini-nav"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+          <div class="mini-body">
+            <div class="mini-tiles"><span class="mini-tile"></span><span class="mini-tile"></span><span class="mini-tile"></span><span class="mini-tile"></span></div>
+            <div class="mini-row" style="width:70%"></div>
+            <div class="mini-row" style="width:90%"></div>
+            <div class="mini-row" style="width:50%"></div>
+            <div class="row gap-4"><span class="mini-chip" style="width:34px;background:var(--color-agent-active)"></span><span class="mini-chip" style="width:24px;background:var(--color-human-review)"></span></div>
+          </div>
+        </div>
+        <div class="nav-card-body">
+          <div class="nav-card-title">AI Operations Dashboard <span class="arw">→</span></div>
+          <div class="nav-card-desc">Dense overview: KPI tiles, live run feed, agent fleet status, and a real-time event log. What needs me now &gt; what's happening &gt; how are we doing.</div>
+          <div class="row gap-4 wrap" style="margin-top:auto;padding-top:var(--space-6)">
+            <span class="ods-badge">metrics</span><span class="ods-badge">table</span><span class="ods-badge">event log</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="ods-card -interactive nav-card" href="examples/approval-inbox.html">
+        <div class="preview">
+          <div class="mini-nav"><i></i><i></i><i class="on"></i><i></i><i></i></div>
+          <div class="mini-body" style="flex-direction:row;gap:var(--space-6)">
+            <div class="stack gap-3" style="width:40%">
+              <div class="mini-row"></div><div class="mini-row" style="width:80%"></div><div class="mini-row" style="width:60%"></div>
+            </div>
+            <div class="stack gap-3" style="flex:1">
+              <div class="mini-row" style="width:90%;background:var(--color-danger)"></div>
+              <div class="mini-row"></div><div class="mini-row" style="width:70%"></div>
+              <div class="row gap-3" style="margin-top:auto"><span class="mini-chip" style="width:28px;background:var(--color-border-strong)"></span><span class="mini-chip" style="width:28px;background:var(--color-primary)"></span></div>
+            </div>
+          </div>
+        </div>
+        <div class="nav-card-body">
+          <div class="nav-card-title">Approval Inbox <span class="arw">→</span></div>
+          <div class="nav-card-desc">Human-in-the-loop review: prioritized queue, AI proposal with diff, evidence &amp; citations, and a sticky approval bar. Keyboard triage (J/K, A/R/E).</div>
+          <div class="row gap-4 wrap" style="margin-top:auto;padding-top:var(--space-6)">
+            <span class="ods-badge">diff</span><span class="ods-badge">citation</span><span class="ods-badge -agent">approval bar</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="ods-card -interactive nav-card" href="examples/run-detail.html">
+        <div class="preview">
+          <div class="mini-nav"><i></i><i></i><i></i><i class="on"></i></div>
+          <div class="mini-body" style="flex-direction:row;gap:var(--space-6)">
+            <div class="stack gap-4" style="width:34%">
+              <span class="mini-chip" style="width:16px;height:16px;border-radius:50%;background:var(--color-success)"></span>
+              <span class="mini-chip" style="width:16px;height:16px;border-radius:50%;background:var(--color-agent-active)"></span>
+              <span class="mini-chip" style="width:16px;height:16px;border-radius:50%;background:var(--color-human-review)"></span>
+            </div>
+            <div class="stack gap-3" style="flex:1">
+              <div class="mini-row" style="font-family:var(--font-mono)"></div>
+              <div class="mini-row" style="width:85%"></div><div class="mini-row" style="width:60%"></div><div class="mini-row" style="width:75%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="nav-card-body">
+          <div class="nav-card-title">Execution Trace / Run Detail <span class="arw">→</span></div>
+          <div class="nav-card-desc">Full auditability: step-by-step stepper, mono event stream, tool calls, candidate outputs, and provenance (model, prompt version, tokens).</div>
+          <div class="row gap-4 wrap" style="margin-top:auto;padding-top:var(--space-6)">
+            <span class="ods-badge">stepper</span><span class="ods-badge">trace</span><span class="ods-badge">candidates</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="ods-card -interactive nav-card" href="examples/components.html">
+        <div class="preview">
+          <div class="mini-body" style="width:100%;justify-content:center">
+            <div class="row gap-3 wrap">
+              <span class="mini-chip" style="width:38px;height:14px;border-radius:var(--radius-sm);background:var(--color-primary)"></span>
+              <span class="mini-chip" style="width:38px;height:14px;border-radius:var(--radius-sm);background:var(--color-surface);border:1px solid var(--color-border-strong)"></span>
+              <span class="mini-chip" style="width:16px;height:14px;border-radius:var(--radius-sm);background:var(--color-success)"></span>
+              <span class="mini-chip" style="width:16px;height:14px;border-radius:var(--radius-sm);background:var(--color-warning)"></span>
+              <span class="mini-chip" style="width:16px;height:14px;border-radius:var(--radius-sm);background:var(--color-danger)"></span>
+            </div>
+            <div class="mini-row" style="width:60%"></div>
+            <div class="row gap-3"><span class="mini-chip" style="width:8px;height:8px;background:var(--color-agent-active)"></span><span class="mini-chip" style="width:48px;height:6px;background:var(--color-border)"></span></div>
+          </div>
+        </div>
+        <div class="nav-card-body">
+          <div class="nav-card-title">Component Gallery <span class="arw">→</span></div>
+          <div class="nav-card-desc">Every component in one place — buttons, composer, badges, AI states, stepper, logs, diffs, cards — with live theme and density toggles.</div>
+          <div class="row gap-4 wrap" style="margin-top:auto;padding-top:var(--space-6)">
+            <span class="ods-badge">24+ components</span><span class="ods-badge -info">light + dark</span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- DOCS -->
+    <div class="section-head">
+      <h2>Documentation</h2>
+      <span class="text-muted text-sm">Read or feed to a coding agent</span>
+    </div>
+    <div class="grid -docs">
+      <a class="ods-card -interactive nav-card" href="DESIGN-SYSTEM.md" style="padding:var(--space-10)">
+        <div class="nav-card-title" style="font-size:var(--fs-md)">DESIGN-SYSTEM.md <span class="arw">→</span></div>
+        <div class="nav-card-desc" style="margin-top:var(--space-4)">The full spec: philosophy, tokens, typography, layout, all components, AI patterns, and screen concepts.</div>
+      </a>
+      <a class="ods-card -interactive nav-card" href="AGENTS.md" style="padding:var(--space-10)">
+        <div class="nav-card-title" style="font-size:var(--fs-md)">AGENTS.md <span class="arw">→</span></div>
+        <div class="nav-card-desc" style="margin-top:var(--space-4)">The deterministic ruleset a coding agent follows to extend the system without visual drift.</div>
+      </a>
+      <a class="ods-card -interactive nav-card" href="README.md" style="padding:var(--space-10)">
+        <div class="nav-card-title" style="font-size:var(--fs-md)">README.md <span class="arw">→</span></div>
+        <div class="nav-card-desc" style="margin-top:var(--space-4)">Quickstart, file map, and copy-paste HTML for the representative component subset.</div>
+      </a>
+    </div>
+
+    <!-- TOKEN PREVIEW -->
+    <div class="section-head">
+      <h2>Semantic tokens</h2>
+      <span class="text-muted text-sm">Color = meaning · resolves per theme</span>
+    </div>
+    <div class="swatches">
+      <div class="sw"><span class="sw-chip" style="background:var(--color-primary)"></span><div><div class="sw-role">Primary</div><div class="sw-name">--color-primary</div></div></div>
+      <div class="sw"><span class="sw-chip" style="background:var(--color-accent)"></span><div><div class="sw-role">Accent</div><div class="sw-name">--color-accent</div></div></div>
+      <div class="sw"><span class="sw-chip" style="background:var(--color-agent-active)"></span><div><div class="sw-role">Agent active</div><div class="sw-name">--color-agent-active</div></div></div>
+      <div class="sw"><span class="sw-chip" style="background:var(--color-automation-step)"></span><div><div class="sw-role">Automation</div><div class="sw-name">--color-automation-step</div></div></div>
+      <div class="sw"><span class="sw-chip" style="background:var(--color-human-review)"></span><div><div class="sw-role">Human review</div><div class="sw-name">--color-human-review</div></div></div>
+      <div class="sw"><span class="sw-chip" style="background:var(--color-success)"></span><div><div class="sw-role">Success</div><div class="sw-name">--color-success</div></div></div>
+      <div class="sw"><span class="sw-chip" style="background:var(--color-warning)"></span><div><div class="sw-role">Warning</div><div class="sw-name">--color-warning</div></div></div>
+      <div class="sw"><span class="sw-chip" style="background:var(--color-danger)"></span><div><div class="sw-role">Danger</div><div class="sw-name">--color-danger</div></div></div>
+      <div class="sw"><span class="sw-chip" style="background:var(--color-info)"></span><div><div class="sw-role">Info</div><div class="sw-name">--color-info</div></div></div>
+      <div class="sw"><span class="sw-chip" style="background:var(--color-confidence-high)"></span><div><div class="sw-role">Confidence hi</div><div class="sw-name">--color-confidence-high</div></div></div>
+      <div class="sw"><span class="sw-chip" style="background:var(--color-surface)"></span><div><div class="sw-role">Surface</div><div class="sw-name">--color-surface</div></div></div>
+      <div class="sw"><span class="sw-chip" style="background:var(--color-surface-sunken)"></span><div><div class="sw-role">Sunken</div><div class="sw-name">--color-surface-sunken</div></div></div>
+    </div>
+
+    <footer class="foot">
+      <span>Operant — AI Workflow Design System</span>
+      <span style="flex:1"></span>
+      <a href="examples/components.html">Components</a>
+      <a href="DESIGN-SYSTEM.md">Spec</a>
+      <a href="AGENTS.md">Agent rules</a>
+    </footer>
+
+  </div>
+
+<script>
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const h = document.documentElement; h.dataset.theme = h.dataset.theme === 'dark' ? 'light' : 'dark';
+  });
+  document.getElementById('density').addEventListener('click', e => {
+    const seg = e.target.closest('.ods-segment'); if (!seg) return;
+    document.querySelectorAll('#density .ods-segment').forEach(s => s.classList.remove('is-active'));
+    seg.classList.add('is-active'); document.documentElement.dataset.density = seg.dataset.d;
+  });
+</script>
+</body>
+</html>

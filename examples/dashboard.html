@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en" data-theme="dark" data-density="comfortable">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Operations Dashboard · Operant</title>
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <style>
+    /* Screen-local layout only — all values still come from tokens */
+    .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-12); }
+    .grid-2 { display: grid; grid-template-columns: 1fr var(--w-context); gap: var(--space-12); align-items: start; }
+    .brand { display: flex; align-items: center; gap: var(--space-6); font-weight: var(--fw-semibold); }
+    .brand-mark { width: 24px; height: 24px; border-radius: var(--radius-sm); background: var(--color-accent);
+      display: grid; place-items: center; color: #fff; font-family: var(--font-mono); font-weight: 700; font-size: 13px; }
+    .searchbar { flex: 1; max-width: 420px; }
+    @media (max-width: 1100px){ .grid-2 { grid-template-columns: 1fr; } .kpis { grid-template-columns: repeat(2,1fr); } }
+  </style>
+</head>
+<body>
+<div class="ods-shell">
+
+  <!-- LEFT NAV -->
+  <nav class="ods-nav" aria-label="Primary">
+    <div class="brand" style="padding: var(--space-4) var(--space-6) var(--space-8)">
+      <span class="brand-mark">O</span> Operant
+    </div>
+    <a class="ods-nav-item is-active">${icon.grid} Overview</a>
+    <a class="ods-nav-item">${icon.play} Runs <span class="ods-count -primary">24</span></a>
+    <a class="ods-nav-item">${icon.check} Reviews <span class="ods-count" style="background:var(--color-human-review-subtle);color:var(--color-human-review)">7</span></a>
+    <a class="ods-nav-item">${icon.flow} Workflows</a>
+    <a class="ods-nav-item">${icon.doc} Traces</a>
+
+    <div class="ods-nav-group">
+      <div class="text-eyebrow">Agents</div>
+      <a class="ods-nav-item"><span class="ods-dot -active"></span> Triage Agent</a>
+      <a class="ods-nav-item"><span class="ods-dot -automation"></span> Research Agent</a>
+      <a class="ods-nav-item"><span class="ods-dot -idle"></span> Summarizer</a>
+      <a class="ods-nav-item"><span class="ods-dot -error"></span> Deploy Agent</a>
+    </div>
+  </nav>
+
+  <!-- TOP BAR -->
+  <header class="ods-topbar">
+    <div class="row gap-6 text-muted text-sm"><span>Operations</span><span>/</span><span style="color:var(--color-text)">Overview</span></div>
+    <div class="searchbar ods-input-group" style="height:var(--control-h-sm)">
+      ${icon.search}
+      <input placeholder="Search runs, agents, incidents…  ⌘K" aria-label="Search">
+    </div>
+    <span class="grow"></span>
+    <span class="ods-badge -info">production</span>
+    <button class="ods-iconbtn" aria-label="Notifications">${icon.bell}</button>
+    <button class="ods-iconbtn" id="themeBtn" aria-label="Toggle theme">${icon.moon}</button>
+    <span class="ods-avatar">RK</span>
+  </header>
+
+  <!-- MAIN -->
+  <main class="ods-main">
+    <div class="ods-page stack gap-12">
+
+      <!-- Attention banner: what needs me now -->
+      <div class="ods-approval-bar" style="border-left:var(--border-strong) solid var(--color-human-review)">
+        <span class="ods-dot -review -pulse"></span>
+        <div class="grow">
+          <div class="ods-run-name">7 items awaiting your review</div>
+          <div class="ods-approval-context">3 high-risk · oldest waiting 12m · SLA breach in 4m</div>
+        </div>
+        <button class="ods-btn -secondary -sm">Snooze</button>
+        <button class="ods-btn -primary -sm">Open review inbox</button>
+      </div>
+
+      <!-- KPIs -->
+      <section class="kpis" aria-label="Key metrics">
+        <div class="ods-card -elevated"><div class="ods-metric">
+          <div class="ods-metric-label">Active runs</div>
+          <div class="ods-metric-value">24</div>
+          <div class="ods-metric-delta -up">▲ 6 vs. 1h ago</div>
+        </div></div>
+        <div class="ods-card -elevated"><div class="ods-metric">
+          <div class="ods-metric-label">Pending reviews</div>
+          <div class="ods-metric-value" style="color:var(--color-human-review)">7</div>
+          <div class="ods-metric-delta">avg wait 5m 20s</div>
+        </div></div>
+        <div class="ods-card -elevated"><div class="ods-metric">
+          <div class="ods-metric-label">Success rate (24h)</div>
+          <div class="ods-metric-value">94.2%</div>
+          <div class="ods-metric-delta -up">▲ 1.1 pts</div>
+        </div></div>
+        <div class="ods-card -elevated"><div class="ods-metric">
+          <div class="ods-metric-label">Avg latency</div>
+          <div class="ods-metric-value">8.4<span style="font-size:var(--fs-lg);color:var(--color-text-subtle)">s</span></div>
+          <div class="ods-metric-delta -down">▼ 0.6s faster</div>
+        </div></div>
+      </section>
+
+      <div class="grid-2">
+        <!-- Left: live runs table -->
+        <div class="stack gap-8">
+          <div class="row between">
+            <h2 class="text-heading">Live runs</h2>
+            <div class="ods-segmented" role="tablist" aria-label="Filter">
+              <span class="ods-segment is-active">All</span>
+              <span class="ods-segment">Running</span>
+              <span class="ods-segment">Review</span>
+              <span class="ods-segment">Failed</span>
+            </div>
+          </div>
+          <div class="ods-card" data-density="compact">
+            <table class="ods-table">
+              <thead><tr>
+                <th>Run</th><th>Agent</th><th>Status</th><th>Step</th>
+                <th class="-num">Conf.</th><th class="-num">Duration</th><th></th>
+              </tr></thead>
+              <tbody>
+                <tr>
+                  <td class="mono">#4821</td>
+                  <td>Triage Agent</td>
+                  <td><span class="ods-status"><span class="ods-dot -active -pulse"></span>Running</span></td>
+                  <td class="-muted">Diagnose (3/5)</td>
+                  <td class="-num"><span style="color:var(--color-confidence-med)">58%</span></td>
+                  <td class="-num mono">2m 04s</td>
+                  <td><button class="ods-iconbtn -sm" aria-label="Open">${icon.arrow}</button></td>
+                </tr>
+                <tr class="is-selected">
+                  <td class="mono">#4820</td>
+                  <td>Deploy Agent</td>
+                  <td><span class="ods-status"><span class="ods-dot -review"></span>Needs review</span></td>
+                  <td class="-muted">Approve rollback</td>
+                  <td class="-num"><span style="color:var(--color-confidence-high)">91%</span></td>
+                  <td class="-num mono">44s</td>
+                  <td><button class="ods-iconbtn -sm" aria-label="Open">${icon.arrow}</button></td>
+                </tr>
+                <tr>
+                  <td class="mono">#4819</td>
+                  <td>Research Agent</td>
+                  <td><span class="ods-status"><span class="ods-dot -automation"></span>Tool call</span></td>
+                  <td class="-muted">web_search</td>
+                  <td class="-num -muted">—</td>
+                  <td class="-num mono">11s</td>
+                  <td><button class="ods-iconbtn -sm" aria-label="Open">${icon.arrow}</button></td>
+                </tr>
+                <tr>
+                  <td class="mono">#4818</td>
+                  <td>Deploy Agent</td>
+                  <td><span class="ods-status"><span class="ods-dot -error"></span>Failed</span></td>
+                  <td class="-muted">Verify · timeout</td>
+                  <td class="-num -muted">—</td>
+                  <td class="-num mono">1m 32s</td>
+                  <td><button class="ods-iconbtn -sm" aria-label="Open">${icon.arrow}</button></td>
+                </tr>
+                <tr>
+                  <td class="mono">#4817</td>
+                  <td>Summarizer</td>
+                  <td><span class="ods-status"><span class="ods-dot -success"></span>Done</span></td>
+                  <td class="-muted">Completed</td>
+                  <td class="-num"><span style="color:var(--color-confidence-high)">96%</span></td>
+                  <td class="-num mono">3.2s</td>
+                  <td><button class="ods-iconbtn -sm" aria-label="Open">${icon.arrow}</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Event log -->
+          <h2 class="text-heading" style="margin-top:var(--space-6)">Recent events</h2>
+          <div class="ods-log">
+            <div class="ods-log-row"><span class="ods-log-time tabular">14:02:13</span><span class="ods-log-level -warn">WARN</span><span class="ods-log-msg">#4821 confidence 58% below 0.7 threshold — <span class="k">escalating to human review</span></span><span class="ods-log-dur tabular"></span></div>
+            <div class="ods-log-row"><span class="ods-log-time tabular">14:02:11</span><span class="ods-log-level -tool">TOOL</span><span class="ods-log-msg"><span class="k">query_logs</span>(service="checkout-svc", window="15m")</span><span class="ods-log-dur tabular">412ms</span></div>
+            <div class="ods-log-row"><span class="ods-log-time tabular">14:01:57</span><span class="ods-log-level -ok">OK</span><span class="ods-log-msg">#4817 summary generated · 96% · 4 citations</span><span class="ods-log-dur tabular">3.2s</span></div>
+            <div class="ods-log-row"><span class="ods-log-time tabular">14:01:44</span><span class="ods-log-level -error">ERR</span><span class="ods-log-msg">#4818 verify step timed out after 90s — <span class="k">retry suggested</span></span><span class="ods-log-dur tabular"></span></div>
+            <div class="ods-log-row"><span class="ods-log-time tabular">14:01:20</span><span class="ods-log-level -info">INFO</span><span class="ods-log-msg">#4820 handed off to <span class="k">@ranjith.kumar</span> for approval</span><span class="ods-log-dur tabular"></span></div>
+          </div>
+        </div>
+
+        <!-- Right: agent fleet + active run detail -->
+        <aside class="stack gap-12">
+          <div class="ods-card">
+            <div class="ods-card-header"><span class="ods-card-title">Agent fleet</span></div>
+            <div class="ods-card-body stack gap-8">
+              <div class="row between"><span class="ods-status"><span class="ods-dot -active -pulse"></span>Triage Agent</span><span class="text-sm text-muted">3 running</span></div>
+              <div class="row between"><span class="ods-status"><span class="ods-dot -automation"></span>Research Agent</span><span class="text-sm text-muted">1 tool call</span></div>
+              <div class="row between"><span class="ods-status"><span class="ods-dot -idle"></span>Summarizer</span><span class="text-sm text-muted">idle</span></div>
+              <div class="row between"><span class="ods-status"><span class="ods-dot -error"></span>Deploy Agent</span><span class="text-sm" style="color:var(--color-danger)">1 failure</span></div>
+            </div>
+          </div>
+
+          <!-- Selected active run -->
+          <article class="ods-run -active">
+            <header class="ods-run-header">
+              <span class="ods-run-avatar">${icon.spark}</span>
+              <div class="grow">
+                <div class="ods-run-name">Deploy Agent · #4820</div>
+                <div class="ods-run-sub">prompt <code>v7</code> · 44s</div>
+              </div>
+              <span class="ods-status"><span class="ods-dot -review"></span>Review</span>
+            </header>
+            <div class="ods-run-body stack gap-8">
+              <p class="text-sm text-muted">Proposes rollback of <code>checkout-svc</code> → <code>v2.30.4</code> after correlating error spike with deploy <code>v2.31.0</code>.</p>
+              <div class="ods-confidence -high">
+                <span class="ods-confidence-track"><span class="ods-confidence-fill"></span></span>
+                <span class="ods-confidence-label">Confidence 91% · 4 sources</span>
+              </div>
+            </div>
+            <footer class="ods-run-footer">
+              <span class="ods-badge"><span class="ods-dot -automation"></span> 4 tools</span>
+              <span class="grow"></span>
+              <button class="ods-btn -danger-ghost -sm">Reject</button>
+              <button class="ods-btn -primary -sm">Approve</button>
+            </footer>
+          </article>
+        </aside>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+  // Icon set (inline SVG strings) — templated into markup above for brevity.
+  const icon = {
+    grid:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>',
+    play:'<svg viewBox="0 0 16 16" fill="currentColor"><path d="M5 3.5v9l7-4.5-7-4.5z"/></svg>',
+    check:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8.5l3 3 7-7"/></svg>',
+    flow:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="4" cy="4" r="2"/><circle cx="12" cy="12" r="2"/><path d="M4 6v3a2 2 0 002 2h4"/></svg>',
+    doc:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>',
+    search:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="M11 11l3 3"/></svg>',
+    bell:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 7a4 4 0 018 0c0 3 1 4 1 4H3s1-1 1-4z"/><path d="M6.5 13a1.5 1.5 0 003 0"/></svg>',
+    moon:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M13 9.5A5.5 5.5 0 016.5 3a5.5 5.5 0 106.5 6.5z"/></svg>',
+    arrow:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3l5 5-5 5"/></svg>',
+    spark:'<svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.6 4.4L14 7l-4.4 1.6L8 13l-1.6-4.4L2 7l4.4-1.6z"/></svg>'
+  };
+  // Replace ${icon.x} placeholders left in the HTML
+  document.body.innerHTML = document.body.innerHTML.replace(/\$\{icon\.(\w+)\}/g, (_, k) => icon[k] || '');
+
+  // Theme toggle
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const html = document.documentElement;
+    html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+  });
+</script>
+</body>
+</html>

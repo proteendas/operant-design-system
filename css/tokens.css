@@ -1,0 +1,389 @@
+/* ============================================================================
+   OPERANT DESIGN SYSTEM — TOKENS
+   A design language for AI-assisted workflows & agentic interfaces.
+
+   Layer order (do not reorder):
+     1. Primitives   — raw values. NEVER reference these directly in components.
+     2. Semantic     — meaning-mapped tokens. Components reference ONLY these.
+     3. Theme        — light (:root) and dark ([data-theme="dark"]) mappings.
+     4. Density      — comfortable (default) and compact modes.
+
+   Rule for agents: components consume --color-*, --space-*, --font-*, --radius-*,
+   --shadow-*, --z-*, --size-icon-*. They must never consume --slate-500, --blue-600,
+   etc. If a needed semantic token does not exist, ADD one here — do not hardcode.
+   ============================================================================ */
+
+/* ---------------------------------------------------------------------------
+   1. PRIMITIVES — raw palette & scales (theme-agnostic, never used in components)
+   --------------------------------------------------------------------------- */
+:root {
+  /* Neutrals — cool slate, the operational backbone */
+  --slate-0:   #ffffff;
+  --slate-25:  #fbfcfd;
+  --slate-50:  #f6f8fa;
+  --slate-100: #eceff3;
+  --slate-150: #e2e7ed;
+  --slate-200: #d6dce4;
+  --slate-300: #b9c2cf;
+  --slate-400: #93a0b1;
+  --slate-500: #6b7889;
+  --slate-600: #4f5b6b;
+  --slate-700: #3a4453;
+  --slate-800: #262e3a;
+  --slate-850: #1c2029;
+  --slate-900: #14171e;
+  --slate-950: #0d0f14;
+
+  /* Blue — primary / intelligence / trust (restrained, not neon) */
+  --blue-50:  #eef2ff;
+  --blue-100: #dbe4ff;
+  --blue-200: #bac8ff;
+  --blue-300: #91a7ff;
+  --blue-400: #6d8cf5;
+  --blue-500: #4c6ef5;
+  --blue-600: #3b5bdb;
+  --blue-700: #324bb8;
+  --blue-800: #2b3f93;
+  --blue-900: #23336f;
+
+  /* Iris/Violet — AGENT identity (distinct from status semantics) */
+  --iris-50:  #f3f0ff;
+  --iris-100: #e5dbff;
+  --iris-200: #d0bfff;
+  --iris-300: #b197fc;
+  --iris-400: #9775fa;
+  --iris-500: #845ef7;
+  --iris-600: #7048e8;
+  --iris-700: #5f3dc4;
+  --iris-800: #4d2f9e;
+
+  /* Teal — automation / info-secondary */
+  --teal-50:  #e6fcf5;
+  --teal-100: #c3fae8;
+  --teal-300: #63e6be;
+  --teal-500: #12b886;
+  --teal-600: #0ca678;
+  --teal-700: #099268;
+
+  /* Green — success */
+  --green-50:  #ebfbee;
+  --green-100: #d3f9d8;
+  --green-300: #8ce99a;
+  --green-500: #40c057;
+  --green-600: #2f9e44;
+  --green-700: #2b8a3e;
+
+  /* Amber — warning / human-review */
+  --amber-50:  #fff9db;
+  --amber-100: #ffec99;
+  --amber-300: #ffd43b;
+  --amber-500: #f59f00;
+  --amber-600: #e8850c;
+  --amber-700: #d9730b;
+
+  /* Red — danger / agent-error */
+  --red-50:  #fff5f5;
+  --red-100: #ffe3e3;
+  --red-300: #ff8787;
+  --red-500: #fa5252;
+  --red-600: #e03131;
+  --red-700: #c92a2a;
+
+  /* Type families */
+  --font-sans: "Inter", "SF Pro Text", -apple-system, BlinkMacSystemFont,
+               "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-display: "Inter", var(--font-sans); /* tight-tracked large headings */
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, "Cascadia Code",
+               "Roboto Mono", Menlo, Consolas, monospace;
+
+  /* Type scale — 1.20 minor-third, tuned for dense dashboards */
+  --fs-2xs: 0.6875rem;  /* 11px — dense table meta, timestamps */
+  --fs-xs:  0.75rem;    /* 12px — labels, badges, captions */
+  --fs-sm:  0.8125rem;  /* 13px — dense body, table cells */
+  --fs-md:  0.875rem;   /* 14px — DEFAULT UI body */
+  --fs-lg:  1rem;       /* 16px — prompt/response reading surfaces */
+  --fs-xl:  1.125rem;   /* 18px — card titles, section heads */
+  --fs-2xl: 1.375rem;   /* 22px — page titles */
+  --fs-3xl: 1.75rem;    /* 28px — display */
+  --fs-4xl: 2.25rem;    /* 36px — hero display (rare in-app) */
+
+  --lh-tight:   1.2;
+  --lh-snug:    1.35;
+  --lh-normal:  1.5;
+  --lh-relaxed: 1.65;   /* long-form AI response reading */
+
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+
+  --tracking-tight:  -0.014em;
+  --tracking-normal:  0;
+  --tracking-wide:    0.02em;
+  --tracking-caps:    0.06em; /* uppercase eyebrow labels */
+
+  /* Spacing — 4px base grid. Use tokens, never raw px. */
+  --space-0:   0;
+  --space-1:   0.125rem; /* 2  */
+  --space-2:   0.25rem;  /* 4  */
+  --space-3:   0.375rem; /* 6  */
+  --space-4:   0.5rem;   /* 8  */
+  --space-5:   0.625rem; /* 10 */
+  --space-6:   0.75rem;  /* 12 */
+  --space-8:   1rem;     /* 16 */
+  --space-10:  1.25rem;  /* 20 */
+  --space-12:  1.5rem;   /* 24 */
+  --space-16:  2rem;     /* 32 */
+  --space-20:  2.5rem;   /* 40 */
+  --space-24:  3rem;     /* 48 */
+  --space-32:  4rem;     /* 64 */
+
+  /* Radius */
+  --radius-none: 0;
+  --radius-xs:   3px;
+  --radius-sm:   5px;
+  --radius-md:   7px;   /* DEFAULT for inputs, buttons, cells */
+  --radius-lg:   10px;  /* cards, panels */
+  --radius-xl:   14px;  /* modals, large surfaces */
+  --radius-full: 999px; /* pills, avatars */
+
+  /* Border widths */
+  --border-hairline: 1px;
+  --border-strong:   1.5px;
+  --border-focus:    2px;
+
+  /* Layout widths */
+  --w-rail:            56px;   /* collapsed icon rail */
+  --w-nav:            240px;   /* left workflow/nav rail */
+  --w-nav-wide:       280px;
+  --w-context:        360px;   /* right context panel */
+  --w-context-wide:   420px;
+  --w-content-max:   1440px;   /* app shell max */
+  --w-reading-max:    720px;   /* prose/response max line length */
+  --h-topnav:          52px;
+  --h-toolbar:         44px;
+  --h-row:             40px;   /* comfortable table/list row */
+  --h-row-compact:     32px;
+
+  /* Motion — calm, operational; nothing bouncy */
+  --dur-instant: 60ms;
+  --dur-fast:   120ms;
+  --dur-base:   180ms;
+  --dur-slow:   260ms;
+  --ease-out:      cubic-bezier(0.2, 0, 0, 1);
+  --ease-in-out:   cubic-bezier(0.45, 0, 0.15, 1);
+  --ease-standard: cubic-bezier(0.2, 0, 0.2, 1);
+
+  /* Z-index scale */
+  --z-base:       0;
+  --z-sticky:    100;
+  --z-nav:       200;
+  --z-dropdown:  400;
+  --z-drawer:    500;
+  --z-modal:     600;
+  --z-toast:     700;
+  --z-tooltip:   800;
+  --z-command:   900; /* command palette above everything */
+
+  /* Icon sizing */
+  --size-icon-xs: 12px;
+  --size-icon-sm: 14px;
+  --size-icon-md: 16px; /* DEFAULT */
+  --size-icon-lg: 20px;
+  --size-icon-xl: 24px;
+
+  /* Focus ring (composed once, reused everywhere) */
+  --focus-ring: 0 0 0 var(--border-focus) var(--color-focus-ring);
+}
+
+/* ---------------------------------------------------------------------------
+   3a. LIGHT THEME (default) — semantic mappings
+   --------------------------------------------------------------------------- */
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+
+  /* Surfaces — z-height increases with elevation */
+  --color-bg:               var(--slate-50);   /* app canvas */
+  --color-surface:          var(--slate-0);    /* cards, panels */
+  --color-surface-elevated: var(--slate-0);    /* menus, popovers (+ shadow) */
+  --color-surface-sunken:   var(--slate-100);  /* wells, inset code, console */
+  --color-surface-hover:    var(--slate-50);
+  --color-surface-active:   var(--slate-100);
+  --color-surface-selected: var(--blue-50);
+
+  /* Text */
+  --color-text:        var(--slate-900);
+  --color-text-muted:  var(--slate-600);
+  --color-text-subtle: var(--slate-500);
+  --color-text-faint:  var(--slate-400);
+  --color-text-onbrand: var(--slate-0);
+  --color-text-link:   var(--blue-600);
+
+  /* Borders */
+  --color-border:        var(--slate-200);
+  --color-border-strong: var(--slate-300);
+  --color-border-subtle: var(--slate-150);
+  --color-divider:       var(--slate-150);
+
+  /* Brand / interactive */
+  --color-primary:        var(--blue-600);
+  --color-primary-hover:  var(--blue-700);
+  --color-primary-active: var(--blue-800);
+  --color-primary-subtle: var(--blue-50);
+  --color-primary-border: var(--blue-200);
+  --color-accent:         var(--iris-600);
+  --color-accent-subtle:  var(--iris-50);
+
+  /* Status — text/icon foreground, subtle bg fill, and border variants */
+  --color-success:        var(--green-600);
+  --color-success-subtle: var(--green-50);
+  --color-success-border: var(--green-300);
+  --color-warning:        var(--amber-700);
+  --color-warning-subtle: var(--amber-50);
+  --color-warning-border: var(--amber-300);
+  --color-danger:         var(--red-600);
+  --color-danger-subtle:  var(--red-50);
+  --color-danger-border:  var(--red-300);
+  --color-info:           var(--blue-600);
+  --color-info-subtle:    var(--blue-50);
+  --color-info-border:    var(--blue-200);
+
+  /* AI / agent semantics — the differentiators of this system */
+  --color-agent-active:   var(--iris-600); /* thinking / running */
+  --color-agent-active-subtle: var(--iris-50);
+  --color-agent-idle:     var(--slate-400);
+  --color-agent-idle-subtle:   var(--slate-100);
+  --color-agent-error:    var(--red-600);
+  --color-agent-error-subtle:  var(--red-50);
+  --color-human-review:   var(--amber-700); /* needs a person */
+  --color-human-review-subtle: var(--amber-50);
+  --color-automation-step: var(--teal-600); /* deterministic/tool step */
+  --color-automation-step-subtle: var(--teal-50);
+  --color-streaming:      var(--iris-500);  /* live token stream accent */
+  --color-confidence-high: var(--green-600);
+  --color-confidence-med:  var(--amber-600);
+  --color-confidence-low:  var(--red-600);
+
+  /* Utility */
+  --color-focus-ring: var(--blue-500);
+  --color-overlay:    rgba(20, 23, 30, 0.45); /* modal scrim */
+  --color-selection:  var(--blue-100);
+  --color-code-bg:    var(--slate-100);
+  --color-code-text:  var(--slate-800);
+
+  /* Shadows — soft, low-spread; elevation reads as calm, not floaty */
+  --shadow-xs: 0 1px 2px rgba(20, 23, 30, 0.06);
+  --shadow-sm: 0 1px 3px rgba(20, 23, 30, 0.08), 0 1px 2px rgba(20, 23, 30, 0.04);
+  --shadow-md: 0 4px 12px rgba(20, 23, 30, 0.10), 0 1px 3px rgba(20, 23, 30, 0.06);
+  --shadow-lg: 0 12px 32px rgba(20, 23, 30, 0.14), 0 2px 8px rgba(20, 23, 30, 0.06);
+  --shadow-focus: var(--focus-ring);
+}
+
+/* ---------------------------------------------------------------------------
+   3b. DARK THEME — the primary operational surface for most ops teams
+   --------------------------------------------------------------------------- */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-bg:               var(--slate-950);
+  --color-surface:          var(--slate-900);
+  --color-surface-elevated: var(--slate-850);
+  --color-surface-sunken:   var(--slate-950);
+  --color-surface-hover:    var(--slate-850);
+  --color-surface-active:   var(--slate-800);
+  --color-surface-selected: rgba(76, 110, 245, 0.14);
+
+  --color-text:        var(--slate-50);
+  --color-text-muted:  var(--slate-300);
+  --color-text-subtle: var(--slate-400);
+  --color-text-faint:  var(--slate-500);
+  --color-text-onbrand: var(--slate-0);
+  --color-text-link:   var(--blue-300);
+
+  --color-border:        var(--slate-800);
+  --color-border-strong: var(--slate-700);
+  --color-border-subtle: var(--slate-850);
+  --color-divider:       var(--slate-800);
+
+  --color-primary:        var(--blue-500);
+  --color-primary-hover:  var(--blue-400);
+  --color-primary-active: var(--blue-300);
+  --color-primary-subtle: rgba(76, 110, 245, 0.14);
+  --color-primary-border: rgba(76, 110, 245, 0.35);
+  --color-accent:         var(--iris-400);
+  --color-accent-subtle:  rgba(132, 94, 247, 0.16);
+
+  --color-success:        var(--green-500);
+  --color-success-subtle: rgba(64, 192, 87, 0.14);
+  --color-success-border: rgba(64, 192, 87, 0.35);
+  --color-warning:        var(--amber-500);
+  --color-warning-subtle: rgba(245, 159, 0, 0.14);
+  --color-warning-border: rgba(245, 159, 0, 0.35);
+  --color-danger:         var(--red-500);
+  --color-danger-subtle:  rgba(250, 82, 82, 0.14);
+  --color-danger-border:  rgba(250, 82, 82, 0.38);
+  --color-info:           var(--blue-400);
+  --color-info-subtle:    rgba(76, 110, 245, 0.14);
+  --color-info-border:    rgba(76, 110, 245, 0.35);
+
+  --color-agent-active:   var(--iris-400);
+  --color-agent-active-subtle: rgba(132, 94, 247, 0.16);
+  --color-agent-idle:     var(--slate-500);
+  --color-agent-idle-subtle:   var(--slate-800);
+  --color-agent-error:    var(--red-500);
+  --color-agent-error-subtle:  rgba(250, 82, 82, 0.14);
+  --color-human-review:   var(--amber-500);
+  --color-human-review-subtle: rgba(245, 159, 0, 0.14);
+  --color-automation-step: var(--teal-500);
+  --color-automation-step-subtle: rgba(18, 184, 134, 0.14);
+  --color-streaming:      var(--iris-300);
+  --color-confidence-high: var(--green-500);
+  --color-confidence-med:  var(--amber-500);
+  --color-confidence-low:  var(--red-500);
+
+  --color-focus-ring: var(--blue-400);
+  --color-overlay:    rgba(0, 0, 0, 0.60);
+  --color-selection:  rgba(76, 110, 245, 0.30);
+  --color-code-bg:    var(--slate-850);
+  --color-code-text:  var(--slate-100);
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.30);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.40), 0 1px 2px rgba(0, 0, 0, 0.30);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.45), 0 2px 4px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.55), 0 4px 10px rgba(0, 0, 0, 0.40);
+  --shadow-focus: var(--focus-ring);
+}
+
+/* ---------------------------------------------------------------------------
+   4. DENSITY MODES — comfortable (default) vs compact
+   Apply data-density="compact" on <html> or any subtree (e.g. a data table).
+   Components read --row-h / --control-h / --density-pad-* so density cascades.
+   --------------------------------------------------------------------------- */
+:root,
+[data-density="comfortable"] {
+  --row-h:        var(--h-row);          /* 40 */
+  --control-h:    36px;
+  --control-h-sm: 28px;
+  --density-pad-x: var(--space-8);       /* 16 */
+  --density-pad-y: var(--space-4);       /* 8  */
+  --density-gap:   var(--space-6);       /* 12 */
+  --density-font:  var(--fs-md);
+}
+
+[data-density="compact"] {
+  --row-h:        var(--h-row-compact);  /* 32 */
+  --control-h:    30px;
+  --control-h-sm: 24px;
+  --density-pad-x: var(--space-6);       /* 12 */
+  --density-pad-y: var(--space-3);       /* 6  */
+  --density-gap:   var(--space-4);       /* 8  */
+  --density-font:  var(--fs-sm);
+}
+
+/* Respect reduced-motion globally */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-instant: 0ms; --dur-fast: 0ms; --dur-base: 0ms; --dur-slow: 0ms;
+  }
+}

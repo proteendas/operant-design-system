@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en" data-theme="dark" data-density="comfortable">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Approval Inbox · Operant</title>
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <style>
+    .inbox { display: grid; grid-template-columns: 340px 1fr; height: 100%; }
+    .queue { border-right: var(--border-hairline) solid var(--color-border); background: var(--color-surface); overflow-y: auto; }
+    .qitem { display: grid; grid-template-columns: auto 1fr auto; gap: var(--space-6); padding: var(--space-8) var(--space-10);
+      border-bottom: var(--border-hairline) solid var(--color-border-subtle); cursor: pointer; }
+    .qitem:hover { background: var(--color-surface-hover); }
+    .qitem.is-active { background: var(--color-surface-selected); box-shadow: inset var(--border-strong) 0 0 0 var(--color-primary); }
+    .detail { overflow-y: auto; padding: var(--space-16); padding-bottom: 120px; position: relative; }
+    .detail-inner { max-width: 860px; margin: 0 auto; }
+    .sticky-bar { position: sticky; bottom: var(--space-8); margin-top: var(--space-12); }
+    .brand { display: flex; align-items: center; gap: var(--space-6); font-weight: var(--fw-semibold); }
+    .brand-mark { width: 22px; height: 22px; border-radius: var(--radius-sm); background: var(--color-accent);
+      display: grid; place-items: center; color: #fff; font-family: var(--font-mono); font-weight: 700; font-size: 12px; }
+    @media (max-width: 900px){ .inbox { grid-template-columns: 1fr; } .queue { display:none; } }
+  </style>
+</head>
+<body>
+<div class="ods-shell">
+  <nav class="ods-nav" aria-label="Primary">
+    <div class="brand" style="padding: var(--space-4) var(--space-6) var(--space-8)"><span class="brand-mark">O</span> Operant</div>
+    <a class="ods-nav-item">Overview</a>
+    <a class="ods-nav-item">Runs</a>
+    <a class="ods-nav-item is-active">Reviews <span class="ods-count" style="background:var(--color-human-review-subtle);color:var(--color-human-review)">7</span></a>
+    <a class="ods-nav-item">Workflows</a>
+    <a class="ods-nav-item">Traces</a>
+  </nav>
+
+  <header class="ods-topbar">
+    <div class="row gap-6 text-muted text-sm"><span>Reviews</span><span>/</span><span style="color:var(--color-text)">Approval inbox</span></div>
+    <span class="grow"></span>
+    <span class="ods-badge -warning">3 high-risk</span>
+    <div class="ods-segmented" aria-label="Sort">
+      <span class="ods-segment is-active">Oldest</span>
+      <span class="ods-segment">Risk</span>
+      <span class="ods-segment">Agent</span>
+    </div>
+    <button class="ods-iconbtn" id="themeBtn" aria-label="Toggle theme">◐</button>
+    <span class="ods-avatar">RK</span>
+  </header>
+
+  <main class="ods-main" style="padding:0">
+    <div class="inbox">
+      <!-- QUEUE -->
+      <div class="queue" role="list" aria-label="Pending reviews">
+        <div class="qitem is-active" role="listitem">
+          <span class="ods-dot -review" style="margin-top:6px"></span>
+          <div>
+            <div class="ods-run-name">Rollback checkout-svc</div>
+            <div class="ods-run-sub">Deploy Agent · #4820 · production</div>
+            <div class="row gap-6" style="margin-top:var(--space-4)">
+              <span class="ods-badge -danger">high-risk</span>
+              <span class="ods-confidence -high"><span class="ods-confidence-track"><span class="ods-confidence-fill"></span></span><span class="ods-confidence-label">91%</span></span>
+            </div>
+          </div>
+          <span class="text-caption">12m</span>
+        </div>
+        <div class="qitem" role="listitem">
+          <span class="ods-dot -review" style="margin-top:6px"></span>
+          <div>
+            <div class="ods-run-name">Refund approval · $4,200</div>
+            <div class="ods-run-sub">Finance Agent · #4816</div>
+            <div class="row gap-6" style="margin-top:var(--space-4)">
+              <span class="ods-badge -danger">high-risk</span>
+              <span class="ods-confidence -low"><span class="ods-confidence-track"><span class="ods-confidence-fill"></span></span><span class="ods-confidence-label">31%</span></span>
+            </div>
+          </div>
+          <span class="text-caption">9m</span>
+        </div>
+        <div class="qitem" role="listitem">
+          <span class="ods-dot -review" style="margin-top:6px"></span>
+          <div>
+            <div class="ods-run-name">Publish KB article edit</div>
+            <div class="ods-run-sub">Docs Agent · #4809</div>
+            <div class="row gap-6" style="margin-top:var(--space-4)">
+              <span class="ods-badge">low-risk</span>
+              <span class="ods-confidence -high"><span class="ods-confidence-track"><span class="ods-confidence-fill"></span></span><span class="ods-confidence-label">88%</span></span>
+            </div>
+          </div>
+          <span class="text-caption">21m</span>
+        </div>
+        <div class="qitem" role="listitem">
+          <span class="ods-dot -review" style="margin-top:6px"></span>
+          <div>
+            <div class="ods-run-name">Escalate ticket to on-call</div>
+            <div class="ods-run-sub">Triage Agent · #4805</div>
+            <div class="row gap-6" style="margin-top:var(--space-4)">
+              <span class="ods-badge -warning">med-risk</span>
+              <span class="ods-confidence -med"><span class="ods-confidence-track"><span class="ods-confidence-fill"></span></span><span class="ods-confidence-label">64%</span></span>
+            </div>
+          </div>
+          <span class="text-caption">28m</span>
+        </div>
+      </div>
+
+      <!-- DETAIL -->
+      <div class="detail">
+        <div class="detail-inner stack gap-12">
+          <div class="stack gap-6">
+            <div class="row gap-6 wrap">
+              <span class="ods-badge -danger">high-risk</span>
+              <span class="ods-badge"><span class="ods-dot -automation"></span> production</span>
+              <span class="ods-badge">reversible</span>
+              <span class="text-caption">waiting 12m · SLA in 4m</span>
+            </div>
+            <h1 class="text-title">Approve rollback of <code>checkout-svc</code> to <code>v2.30.4</code></h1>
+            <div class="ods-run-sub">Proposed by <b style="color:var(--color-text)">Deploy Agent</b> · run <code>#4820</code> · prompt <code>v7</code></div>
+          </div>
+
+          <!-- AI rationale -->
+          <section class="ods-response">
+            <div class="text-eyebrow" style="margin-bottom:var(--space-6)">Agent rationale</div>
+            <div class="ods-response-prose">
+              <p>Error rate on <code>checkout-svc</code> rose from 0.3% to 7.1% starting 14:02 UTC, coinciding
+              exactly with the deploy of <code>v2.31.0</code>.<sup class="ods-cite-ref">1</sup> The regression
+              traces to a null-check removed in the payment adapter.<sup class="ods-cite-ref">2</sup> Rolling back
+              to the last healthy release <code>v2.30.4</code> is low-blast-radius and reversible.</p>
+            </div>
+            <div class="row gap-8 wrap" style="margin-top:var(--space-8)">
+              <span class="ods-confidence -high"><span class="ods-confidence-track"><span class="ods-confidence-fill"></span></span><span class="ods-confidence-label">Confidence 91%</span></span>
+              <span class="ods-tool"><span class="name">query_metrics</span> · 3 calls</span>
+              <span class="ods-tool"><span class="name">git_blame</span> · 1 call</span>
+            </div>
+          </section>
+
+          <!-- Diff -->
+          <section class="stack gap-6">
+            <div class="text-eyebrow">Proposed change · deployment manifest</div>
+            <div class="ods-diff">
+              <div class="ods-diff-line -del"><span class="ln">12</span><span class="code">  image: checkout-svc:v2.31.0</span></div>
+              <div class="ods-diff-line -add"><span class="ln">12</span><span class="code">  image: checkout-svc:v2.30.4</span></div>
+              <div class="ods-diff-line"><span class="ln">13</span><span class="code">  replicas: 6</span></div>
+              <div class="ods-diff-line"><span class="ln">14</span><span class="code">  strategy: rolling</span></div>
+            </div>
+          </section>
+
+          <!-- Evidence -->
+          <section class="stack gap-6">
+            <div class="text-eyebrow">Evidence · 2 sources</div>
+            <div class="ods-citation">
+              <span class="ods-citation-index">1</span>
+              <div class="grow">
+                <div class="ods-citation-title">Metrics: checkout-svc error_rate spike</div>
+                <div class="ods-citation-src">grafana · panel 14 · 14:00–14:10 UTC · relevance 0.96</div>
+              </div>
+              <a class="ods-btn -ghost -sm" href="#">Open</a>
+            </div>
+            <div class="ods-citation">
+              <span class="ods-citation-index">2</span>
+              <div class="grow">
+                <div class="ods-citation-title">git blame: payment_adapter.py L88 (null-check removed)</div>
+                <div class="ods-citation-src">commit a91f3c · v2.31.0 · relevance 0.89</div>
+              </div>
+              <a class="ods-btn -ghost -sm" href="#">Open</a>
+            </div>
+          </section>
+
+          <!-- STICKY APPROVAL BAR -->
+          <div class="sticky-bar">
+            <div class="ods-approval-bar" role="group" aria-label="Review decision">
+              <div class="grow">
+                <div class="ods-run-name">Your decision</div>
+                <div class="ods-approval-context">Logged with your identity + timestamp · reversible via re-deploy</div>
+              </div>
+              <button class="ods-btn -danger-ghost">Reject <kbd>R</kbd></button>
+              <button class="ods-btn -secondary">Edit <kbd>E</kbd></button>
+              <button class="ods-btn -secondary">Retry</button>
+              <button class="ods-btn -primary">Approve <kbd>A</kbd></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const h = document.documentElement; h.dataset.theme = h.dataset.theme === 'dark' ? 'light' : 'dark';
+  });
+  // Queue selection + keyboard triage (J/K move, A/R/E act)
+  const items = [...document.querySelectorAll('.qitem')];
+  let idx = 0;
+  const select = i => { items.forEach(x=>x.classList.remove('is-active')); idx=(i+items.length)%items.length; items[idx].classList.add('is-active'); items[idx].scrollIntoView({block:'nearest'}); };
+  items.forEach((el,i)=>el.addEventListener('click',()=>select(i)));
+  addEventListener('keydown', e => {
+    if(e.key==='j'||e.key==='ArrowDown'){select(idx+1);e.preventDefault();}
+    if(e.key==='k'||e.key==='ArrowUp'){select(idx-1);e.preventDefault();}
+  });
+</script>
+</body>
+</html>

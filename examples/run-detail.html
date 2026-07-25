@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en" data-theme="dark" data-density="comfortable">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Run #4820 · Trace · Operant</title>
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <style>
+    .trace { display: grid; grid-template-columns: 300px 1fr; gap: var(--space-16); align-items: start; }
+    .brand { display:flex; align-items:center; gap:var(--space-6); font-weight:var(--fw-semibold); }
+    .brand-mark { width:22px;height:22px;border-radius:var(--radius-sm);background:var(--color-accent);
+      display:grid;place-items:center;color:#fff;font-family:var(--font-mono);font-weight:700;font-size:12px; }
+    @media (max-width: 900px){ .trace { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div class="ods-shell -with-context">
+  <nav class="ods-nav" aria-label="Primary">
+    <div class="brand" style="padding: var(--space-4) var(--space-6) var(--space-8)"><span class="brand-mark">O</span> Operant</div>
+    <a class="ods-nav-item">Overview</a>
+    <a class="ods-nav-item">Runs</a>
+    <a class="ods-nav-item">Reviews</a>
+    <a class="ods-nav-item is-active">Traces</a>
+  </nav>
+
+  <header class="ods-topbar">
+    <div class="row gap-6 text-muted text-sm"><span>Traces</span><span>/</span><span class="mono" style="color:var(--color-text)">#4820</span></div>
+    <span class="grow"></span>
+    <button class="ods-btn -secondary -sm">Export trace</button>
+    <button class="ods-btn -secondary -sm">Re-run with edits</button>
+    <button class="ods-iconbtn" id="themeBtn" aria-label="Toggle theme">◐</button>
+  </header>
+
+  <main class="ods-main">
+    <div class="ods-page stack gap-12">
+      <!-- Header -->
+      <div class="stack gap-6">
+        <div class="row gap-6 wrap">
+          <span class="ods-status"><span class="ods-dot -review"></span>Awaiting review</span>
+          <span class="ods-badge"><span class="ods-dot -automation"></span> Deploy Agent</span>
+          <span class="ods-badge">prompt <code style="background:transparent">v7</code></span>
+          <span class="ods-badge">claude-opus-4-8</span>
+          <span class="text-caption">44s · 6,204 tokens</span>
+        </div>
+        <h1 class="text-title">Incident #4821 — checkout-svc error spike</h1>
+      </div>
+
+      <!-- Tabs -->
+      <div class="ods-tabs" role="tablist">
+        <span class="ods-tab" role="tab">Output</span>
+        <span class="ods-tab is-active" role="tab" aria-selected="true">Trace</span>
+        <span class="ods-tab" role="tab">Sources</span>
+        <span class="ods-tab" role="tab">Metrics</span>
+      </div>
+
+      <div class="trace">
+        <!-- Stepper -->
+        <div class="ods-stepper" aria-label="Execution steps">
+          <div class="ods-step is-done">
+            <div class="ods-step-rail"><div class="ods-step-node">✓</div><div class="ods-step-line"></div></div>
+            <div class="ods-step-body"><div class="ods-step-title">Detect</div><div class="ods-step-meta">alert ingested · 0.4s</div></div>
+          </div>
+          <div class="ods-step is-done">
+            <div class="ods-step-rail"><div class="ods-step-node">✓</div><div class="ods-step-line"></div></div>
+            <div class="ods-step-body"><div class="ods-step-title">Triage</div><div class="ods-step-meta">severity=high · 2.1s</div></div>
+          </div>
+          <div class="ods-step is-done">
+            <div class="ods-step-rail"><div class="ods-step-node">✓</div><div class="ods-step-line"></div></div>
+            <div class="ods-step-body"><div class="ods-step-title">Diagnose</div><div class="ods-step-meta">4 tools · 91% · 18s</div></div>
+          </div>
+          <div class="ods-step is-review">
+            <div class="ods-step-rail"><div class="ods-step-node">!</div><div class="ods-step-line"></div></div>
+            <div class="ods-step-body"><div class="ods-step-title">Remediate</div><div class="ods-step-meta" style="color:var(--color-human-review)">awaiting human approval</div></div>
+          </div>
+          <div class="ods-step">
+            <div class="ods-step-rail"><div class="ods-step-node">5</div></div>
+            <div class="ods-step-body"><div class="ods-step-title">Verify</div><div class="ods-step-meta">pending</div></div>
+          </div>
+        </div>
+
+        <!-- Event log -->
+        <div class="stack gap-6">
+          <div class="row between">
+            <div class="text-eyebrow">Event stream</div>
+            <div class="ods-segmented" aria-label="Log filter">
+              <span class="ods-segment is-active">All</span>
+              <span class="ods-segment">Tools</span>
+              <span class="ods-segment">Errors</span>
+            </div>
+          </div>
+          <div class="ods-log">
+            <div class="ods-log-row"><span class="ods-log-time tabular">14:01:20</span><span class="ods-log-level -info">INFO</span><span class="ods-log-msg">Run started · prompt <span class="k">v7</span> · input: alert AL-9931</span><span class="ods-log-dur tabular"></span></div>
+            <div class="ods-log-row"><span class="ods-log-time tabular">14:01:22</span><span class="ods-log-level -tool">TOOL</span><span class="ods-log-msg"><span class="k">query_metrics</span>(service="checkout-svc", metric="error_rate")</span><span class="ods-log-dur tabular">318ms</span></div>
+            <div class="ods-log-row"><span class="ods-log-time tabular">14:01:23</span><span class="ods-log-level -ok">OK</span><span class="ods-log-msg">error_rate 0.3% → 7.1% at 14:02 UTC</span><span class="ods-log-dur tabular"></span></div>
+            <div class="ods-log-row"><span class="ods-log-time tabular">14:01:26</span><span class="ods-log-level -tool">TOOL</span><span class="ods-log-msg"><span class="k">git_blame</span>(file="payment_adapter.py", line=88)</span><span class="ods-log-dur tabular">204ms</span></div>
+            <div class="ods-log-row"><span class="ods-log-time tabular">14:01:27</span><span class="ods-log-level -ok">OK</span><span class="ods-log-msg">null-check removed in commit <span class="k">a91f3c</span> (v2.31.0)</span><span class="ods-log-dur tabular"></span></div>
+            <div class="ods-log-row"><span class="ods-log-time tabular">14:01:38</span><span class="ods-log-level -info">INFO</span><span class="ods-log-msg">Diagnosis: regression from v2.31.0 · confidence <span class="k">0.91</span></span><span class="ods-log-dur tabular"></span></div>
+            <div class="ods-log-row"><span class="ods-log-time tabular">14:01:41</span><span class="ods-log-level -warn">WARN</span><span class="ods-log-msg">Remediation is high-risk (production) — <span class="k">requires human approval</span></span><span class="ods-log-dur tabular"></span></div>
+            <div class="ods-log-row"><span class="ods-log-time tabular">14:01:44</span><span class="ods-log-level -info">INFO</span><span class="ods-log-msg">Handed off to <span class="k">@ranjith.kumar</span> · paused</span><span class="ods-log-dur tabular"></span></div>
+          </div>
+
+          <!-- Uncertain / candidates -->
+          <div class="text-eyebrow" style="margin-top:var(--space-6)">Candidate remediations</div>
+          <div class="ods-candidates">
+            <div class="ods-candidate is-selected">
+              <div class="row between"><b class="text-sm">Rollback to v2.30.4</b><span class="ods-badge -success">recommended</span></div>
+              <p class="text-caption" style="margin-top:var(--space-4)">Reversible · low blast radius · restores known-good.</p>
+              <div class="ods-confidence -high" style="margin-top:var(--space-6)"><span class="ods-confidence-track"><span class="ods-confidence-fill"></span></span><span class="ods-confidence-label">91%</span></div>
+            </div>
+            <div class="ods-candidate">
+              <div class="row between"><b class="text-sm">Hotfix null-check</b><span class="ods-badge">forward-fix</span></div>
+              <p class="text-caption" style="margin-top:var(--space-4)">Keeps v2.31 features · needs new build + review.</p>
+              <div class="ods-confidence -med" style="margin-top:var(--space-6)"><span class="ods-confidence-track"><span class="ods-confidence-fill"></span></span><span class="ods-confidence-label">57%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Right context panel -->
+  <aside class="ods-context">
+    <div class="ods-pane-header"><b>Run details</b></div>
+    <div class="stack gap-12" style="padding: var(--space-12)">
+      <div class="ods-metric" style="padding:0">
+        <div class="ods-metric-label">Confidence</div>
+        <div class="ods-metric-value" style="color:var(--color-confidence-high)">91%</div>
+      </div>
+      <hr class="divider">
+      <div class="stack gap-6 text-sm">
+        <div class="row between"><span class="text-muted">Agent</span><span>Deploy Agent</span></div>
+        <div class="row between"><span class="text-muted">Model</span><span class="mono">claude-opus-4-8</span></div>
+        <div class="row between"><span class="text-muted">Prompt</span><span class="mono">v7</span></div>
+        <div class="row between"><span class="text-muted">Tokens</span><span class="tabular">6,204</span></div>
+        <div class="row between"><span class="text-muted">Tools used</span><span>4</span></div>
+        <div class="row between"><span class="text-muted">Duration</span><span class="tabular">44s</span></div>
+      </div>
+      <hr class="divider">
+      <div class="ods-error-state" style="padding:var(--space-8)">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 5v4M8 11h.01"/></svg>
+        <div><b class="text-sm">Blocked on human</b><p class="text-caption" style="margin-top:var(--space-3)">Remediation paused pending approval in the review inbox.</p></div>
+      </div>
+      <a class="ods-btn -primary -block" href="approval-inbox.html">Go to approval</a>
+    </div>
+  </aside>
+</div>
+
+<script>
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const h = document.documentElement; h.dataset.theme = h.dataset.theme === 'dark' ? 'light' : 'dark';
+  });
+  document.querySelectorAll('.ods-tab').forEach(t => t.addEventListener('click', () => {
+    document.querySelectorAll('.ods-tab').forEach(x=>{x.classList.remove('is-active');x.setAttribute('aria-selected','false');});
+    t.classList.add('is-active'); t.setAttribute('aria-selected','true');
+  }));
+  document.querySelectorAll('.ods-candidate').forEach(c => c.addEventListener('click', () => {
+    document.querySelectorAll('.ods-candidate').forEach(x=>x.classList.remove('is-selected'));
+    c.classList.add('is-selected');
+  }));
+</script>
+</body>
+</html>

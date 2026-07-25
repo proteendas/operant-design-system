@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en" data-theme="dark" data-density="comfortable">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Component Gallery · Operant</title>
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <style>
+    .wrap { max-width: 1000px; margin: 0 auto; padding: var(--space-16); }
+    .sec { margin-top: var(--space-24); }
+    .sec > h2 { font-size: var(--fs-xl); font-weight: var(--fw-semibold); margin-bottom: var(--space-8);
+      padding-bottom: var(--space-4); border-bottom: var(--border-hairline) solid var(--color-border); }
+    .demo { display: flex; flex-wrap: wrap; gap: var(--space-8); align-items: center; padding: var(--space-8) 0; }
+    .toolbar { position: sticky; top: 0; z-index: var(--z-sticky); display: flex; align-items: center; gap: var(--space-8);
+      padding: var(--space-8) var(--space-16); background: var(--color-surface); border-bottom: var(--border-hairline) solid var(--color-border); }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <b>Operant · Component Gallery</b>
+    <span class="grow" style="flex:1"></span>
+    <div class="ods-segmented" id="density" aria-label="Density">
+      <span class="ods-segment is-active" data-d="comfortable">Comfortable</span>
+      <span class="ods-segment" data-d="compact">Compact</span>
+    </div>
+    <button class="ods-btn -secondary -sm" id="themeBtn">Toggle theme</button>
+  </div>
+
+  <div class="wrap">
+    <div class="sec">
+      <h2>Buttons</h2>
+      <div class="demo">
+        <button class="ods-btn -primary">Primary</button>
+        <button class="ods-btn -secondary">Secondary</button>
+        <button class="ods-btn -ghost">Ghost</button>
+        <button class="ods-btn -danger">Danger</button>
+        <button class="ods-btn -danger-ghost">Reject</button>
+        <button class="ods-btn -primary" disabled>Disabled</button>
+        <button class="ods-iconbtn" aria-label="More">⋯</button>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h2>Tabs · Segmented</h2>
+      <div class="ods-tabs"><span class="ods-tab is-active">Output</span><span class="ods-tab">Trace</span><span class="ods-tab">Sources</span></div>
+      <div class="demo">
+        <div class="ods-segmented"><span class="ods-segment is-active">Live</span><span class="ods-segment">Paused</span></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h2>Inputs · Prompt composer</h2>
+      <div class="demo" style="max-width:520px;display:block">
+        <div class="ods-field">
+          <label class="ods-label">Workflow name</label>
+          <input class="ods-input" placeholder="e.g. Incident triage">
+          <span class="ods-hint">Shown in the run history.</span>
+        </div>
+        <div class="ods-field" style="margin-top:var(--space-8)">
+          <label class="ods-label">Invalid example</label>
+          <input class="ods-input is-invalid" value="bad value" aria-invalid="true">
+          <span class="ods-error-text">This name is already in use.</span>
+        </div>
+        <form class="ods-composer" style="margin-top:var(--space-12)">
+          <textarea class="ods-composer-input" rows="1" placeholder="Ask the agent…"></textarea>
+          <div class="ods-composer-toolbar">
+            <span class="ods-composer-chip"><span class="ods-dot -automation"></span> claude-opus-4-8</span>
+            <span class="grow" style="flex:1"></span>
+            <span class="ods-composer-meta tabular">0 / 8k</span>
+            <button class="ods-btn -primary -sm">Send</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h2>Badges · Status · Confidence</h2>
+      <div class="demo">
+        <span class="ods-badge">default</span>
+        <span class="ods-badge -success">success</span>
+        <span class="ods-badge -warning">warning</span>
+        <span class="ods-badge -danger">danger</span>
+        <span class="ods-badge -info">info</span>
+        <span class="ods-badge -agent"><span class="ods-dot -active"></span> agent</span>
+      </div>
+      <div class="demo">
+        <span class="ods-status"><span class="ods-dot -active -pulse"></span>Running</span>
+        <span class="ods-status"><span class="ods-dot -idle"></span>Idle</span>
+        <span class="ods-status"><span class="ods-dot -review"></span>Needs review</span>
+        <span class="ods-status"><span class="ods-dot -automation"></span>Tool call</span>
+        <span class="ods-status"><span class="ods-dot -success"></span>Done</span>
+        <span class="ods-status"><span class="ods-dot -error"></span>Failed</span>
+      </div>
+      <div class="demo">
+        <span class="ods-confidence -high"><span class="ods-confidence-track"><span class="ods-confidence-fill"></span></span><span class="ods-confidence-label">High 88%</span></span>
+        <span class="ods-confidence -med"><span class="ods-confidence-track"><span class="ods-confidence-fill"></span></span><span class="ods-confidence-label">Med 58%</span></span>
+        <span class="ods-confidence -low"><span class="ods-confidence-track"><span class="ods-confidence-fill"></span></span><span class="ods-confidence-label">Low 28%</span></span>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h2>AI states</h2>
+      <div class="demo">
+        <span class="ods-thinking"><span class="ods-thinking-dots"><i></i><i></i><i></i></span> Thinking…</span>
+        <span class="ods-tool"><span class="name">query_logs</span>(service="checkout")</span>
+        <span class="ods-tool is-running"><span class="name">web_search</span> running…</span>
+        <span class="ods-tool is-error"><span class="name">deploy</span> failed</span>
+      </div>
+      <section class="ods-response -streaming" style="margin-top:var(--space-8)">
+        <div class="ods-response-prose"><p>Streaming a partial answer as tokens arrive<span class="ods-caret"></span></p></div>
+      </section>
+    </div>
+
+    <div class="sec">
+      <h2>Stepper</h2>
+      <div class="ods-stepper" style="max-width:420px">
+        <div class="ods-step is-done"><div class="ods-step-rail"><div class="ods-step-node">✓</div><div class="ods-step-line"></div></div><div class="ods-step-body"><div class="ods-step-title">Detect</div><div class="ods-step-meta">0.4s</div></div></div>
+        <div class="ods-step is-active"><div class="ods-step-rail"><div class="ods-step-node">2</div><div class="ods-step-line"></div></div><div class="ods-step-body"><div class="ods-step-title">Diagnose</div><div class="ods-step-meta">running…</div></div></div>
+        <div class="ods-step is-review"><div class="ods-step-rail"><div class="ods-step-node">!</div><div class="ods-step-line"></div></div><div class="ods-step-body"><div class="ods-step-title">Remediate</div><div class="ods-step-meta">awaiting human</div></div></div>
+        <div class="ods-step"><div class="ods-step-rail"><div class="ods-step-node">4</div></div><div class="ods-step-body"><div class="ods-step-title">Verify</div><div class="ods-step-meta">pending</div></div></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h2>Event log · Citation · Diff</h2>
+      <div class="ods-log" style="margin-bottom:var(--space-8)">
+        <div class="ods-log-row"><span class="ods-log-time tabular">14:02:11</span><span class="ods-log-level -tool">TOOL</span><span class="ods-log-msg"><span class="k">query_logs</span>(window="15m")</span><span class="ods-log-dur tabular">412ms</span></div>
+        <div class="ods-log-row"><span class="ods-log-time tabular">14:02:12</span><span class="ods-log-level -ok">OK</span><span class="ods-log-msg">1,204 lines · 37 errors</span><span class="ods-log-dur tabular"></span></div>
+        <div class="ods-log-row"><span class="ods-log-time tabular">14:02:13</span><span class="ods-log-level -warn">WARN</span><span class="ods-log-msg">Confidence below threshold</span><span class="ods-log-dur tabular"></span></div>
+      </div>
+      <div class="ods-citation" style="margin-bottom:var(--space-8)">
+        <span class="ods-citation-index">1</span>
+        <div class="grow" style="flex:1"><div class="ods-citation-title">Deploy log: checkout-svc v2.31.0</div><div class="ods-citation-src">ci/cd · #9931 · relevance 0.94</div></div>
+        <a class="ods-btn -ghost -sm" href="#">Open</a>
+      </div>
+      <div class="ods-diff">
+        <div class="ods-diff-line -del"><span class="ln">12</span><span class="code">  image: checkout-svc:v2.31.0</span></div>
+        <div class="ods-diff-line -add"><span class="ln">12</span><span class="code">  image: checkout-svc:v2.30.4</span></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h2>Cards · Empty · Skeleton</h2>
+      <div class="demo" style="align-items:stretch">
+        <div class="ods-card -elevated" style="width:220px"><div class="ods-metric"><div class="ods-metric-label">Success rate</div><div class="ods-metric-value">94.2%</div><div class="ods-metric-delta -up">▲ 1.1</div></div></div>
+        <div class="ods-card" style="width:260px"><div class="ods-card-body stack gap-6"><div class="ods-skeleton -line -w60"></div><div class="ods-skeleton -line"></div><div class="ods-skeleton -line -w40"></div></div></div>
+        <div class="ods-card" style="width:260px"><div class="ods-empty" style="padding:var(--space-12)"><div class="ods-empty-title">No runs yet</div><p class="text-caption">Start your first workflow.</p><button class="ods-btn -primary -sm">New run</button></div></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h2>Approval bar</h2>
+      <div class="ods-approval-bar">
+        <div class="grow" style="flex:1"><div class="ods-run-name">Approve rollback to v2.30.4?</div><div class="ods-approval-context">production · reversible</div></div>
+        <button class="ods-btn -danger-ghost">Reject</button>
+        <button class="ods-btn -secondary">Edit</button>
+        <button class="ods-btn -primary">Approve</button>
+      </div>
+    </div>
+
+    <div style="height:var(--space-32)"></div>
+  </div>
+
+<script>
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const h = document.documentElement; h.dataset.theme = h.dataset.theme === 'dark' ? 'light' : 'dark';
+  });
+  document.getElementById('density').addEventListener('click', e => {
+    const seg = e.target.closest('.ods-segment'); if(!seg) return;
+    document.querySelectorAll('#density .ods-segment').forEach(s=>s.classList.remove('is-active'));
+    seg.classList.add('is-active'); document.documentElement.dataset.density = seg.dataset.d;
+  });
+</script>
+</body>
+</html>
